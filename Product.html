@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PrismKart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>PrismKart</h1>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <select id="categoryFilter">
+        <option value="All">All Categories</option>
+        <option value="Traditional">Traditional</option>
+        <option value="Fusion">Fusion</option>
+        <option value="Western">Western</option>
+      </select>
+      <select id="priceSort">
+        <option value="default">Sort by Price</option>
+        <option value="low-high">Low ➡ High</option>
+        <option value="high-low">High ➡ Low</option>
+      </select>
+      <button id="cartBtn">🛒 Cart (<span id="cartCount">0</span>)</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="product-grid" id="productGrid"></div>
+  </main>
+
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <h2>Your Cart</h2>
+      <ul id="cartItems"></ul>
+      <p id="cartTotal"></p>
+      <button onclick="closeCart()">Close</button>
+      <button id="checkoutBtn">Proceed to Checkout</button>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

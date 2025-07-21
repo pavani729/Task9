@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PrismKart - Checkout</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="checkout-container">
+    <h1>Checkout</h1>
+    <div id="checkoutItems"></div>
+    <div class="summary">
+      <p id="subtotal">Subtotal: ₹0</p>
+      <p id="shipping">Shipping: ₹0</p>
+      <p id="grandTotal"><strong>Grand Total: ₹0</strong></p>
+    </div>
+    <button id="placeOrderBtn" onclick="placeOrder()">Place Order</button>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const checkoutItems = document.getElementById("checkoutItems");
+    const subtotalText = document.getElementById("subtotal");
+    const shippingText = document.getElementById("shipping");
+    const grandTotalText = document.getElementById("grandTotal");
+    const placeOrderBtn = document.getElementById("placeOrderBtn");
+
+    function renderCheckout() {
+      checkoutItems.innerHTML = "";
+      let subtotal = 0;
+
+      if (cart.length === 0) {
+        checkoutItems.innerHTML = "<div class='empty-msg'>Your cart is empty.</div>";
+        subtotalText.textContent = "Subtotal: ₹0";
+        shippingText.textContent = "Shipping: ₹0";
+        grandTotalText.textContent = "Grand Total: ₹0";
+        placeOrderBtn.disabled = true;
+        return;
+      }
+
+      placeOrderBtn.disabled = false;
+
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-info">
+            <img src="${item.image}" class="product-img" alt="${item.title}">
+            <div>
+              <h4>${item.title}</h4>
+              <p>₹${item.price} x ${item.qty} = ₹${itemTotal}</p>
+            </div>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        `;
+        checkoutItems.appendChild(card);
+      });
+
+      const shipping = subtotal > 2000 ? 0 : 100;
+      const grandTotal = subtotal + shipping;
+
+      subtotalText.textContent = `Subtotal: ₹${subtotal}`;
+      shippingText.textContent = `Shipping: ₹${shipping}`;
+      grandTotalText.textContent = `Grand Total: ₹${grandTotal}`;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCheckout();
+    }
+
+    function placeOrder() {
+      if (cart.length === 0) {
+        alert("❌ Your cart is empty. Add some items before placing order.");
+        return;
+      }
+
+      alert("🎉 Order placed successfully!");
+      cart = [];
+      localStorage.removeItem("cart");
+      renderCheckout();
+    }
+
+    renderCheckout();
+  </script>
+</body>
+</html>
+
